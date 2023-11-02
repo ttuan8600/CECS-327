@@ -22,6 +22,7 @@ For example, if the IPv4 address of the remote machine is 192.168.1.10, the host
 
 host = '192.168.1.10'
 ```
+
 This updated host value should be used by both the client and the server in their respective code. This way, they can communicate with each other over the network.
 
 Remember to replace the port number in the host value if the default port is not being used.
