@@ -1,11 +1,18 @@
 import socket
+import sys
+
+if len(sys.argv) != 3:
+    print("Usage: python server.py <server_ip> <server_port>")
+    sys.exit(1)
+
+# Get the server address and port from command-line arguments
+serverIP = sys.argv[1]
+serverPort = int(sys.argv[2])
 
 # Establish a TCP socket
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Bind the socket to the localhost IP address and a specific port number
-serverIP = 'localhost'
-serverPort = 1024
 serverSocket.bind((serverIP, serverPort))
 
 # Start listening for incoming connections
