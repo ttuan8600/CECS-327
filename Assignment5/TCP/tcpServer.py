@@ -19,8 +19,8 @@ while True:
     data = str(clientSocket.recv(1024))
 
     # Convert the received data to capital letters, print to terminal and send it back to the client
-    capitalData = data.upper()
-    print("Message from client: " + capitalData)
-    clientSocket.send(bytearray(str(capitalData), encoding='utf-8'))
+    capitalized_Data = data.upper()
+    print("Message from client: " + capitalized_Data)
+    clientSocket.send(bytearray(str(capitalized_Data), encoding='utf-8'))
 
     clientSocket.close()
