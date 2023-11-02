@@ -22,10 +22,6 @@ For example, if the IPv4 address of the remote machine is 192.168.1.10, the host
 
 host = '192.168.1.10'
 ```
-This updated host value should be used by both the client and the server in their respective code. This way, they can communicate with each other over the network.</s>
+This updated host value should be used by both the client and the server in their respective code. This way, they can communicate with each other over the network.
 
 Remember to replace the port number in the host value if the default port is not being used.
-
-If you want to replace 'localhost' with the hostname of the remote machine, you can use the command hostname to find the hostname. Replace 'localhost' with the hostname of the remote machine in your code. However, note that using hostnames might not work in all cases due to DNS resolution issues.</s>
-
-It's generally recommended to use IP addresses instead of hostnames to avoid potential issues related to DNS resolution.</s>
