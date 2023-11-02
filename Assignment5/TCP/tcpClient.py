@@ -19,5 +19,4 @@ clientSocket.send(bytearray(str(message), encoding='utf-8'))
 # Receive data from server and print it
 print("Message from server: " + str(clientSocket.recv(1024)))
 
-# Close the socket
 clientSocket.close()
