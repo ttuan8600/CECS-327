@@ -14,13 +14,17 @@ serverSocket.listen(5)
 while True:
     # Accept an incoming connection from a client
     clientSocket, clientAddress = serverSocket.accept()
-
-    # Receive data from client
-    data = str(clientSocket.recv(1024))
-
-    # Convert the received data to capital letters, print to terminal and send it back to the client
-    capitalized_Data = data.upper()
-    print("Message from client: " + capitalized_Data)
-    clientSocket.send(bytearray(str(capitalized_Data), encoding='utf-8'))
+    while True:
+        # Receive data from client
+        data = str(clientSocket.recv(1024))
+        
+        # close if client cut off connection
+        if not data:
+            break
+        # print to terminal
+        print("Message from client: " + data)
+        # Convert the received data to capital letters and send it back to the client
+        capitalized_Data = data.upper()
+        clientSocket.send(bytearray(str(capitalized_Data), encoding='utf-8'))
 
     clientSocket.close()
