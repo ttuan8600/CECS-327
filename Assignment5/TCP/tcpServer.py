@@ -20,6 +20,7 @@ while True:
 
     # Convert the received data to capital letters and send it back to the client
     capitalData = data.upper()
+    print(capitalData)
     clientSocket.send(bytearray(str(capitalData), encoding='utf-8'))
 
     # Close the client socket
