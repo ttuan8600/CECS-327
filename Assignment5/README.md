@@ -21,11 +21,11 @@ Here is a simple way to do this:
 
     Save the changes and run the updated code.
 
-For example, if the IPv4 address of the remote machine is 192.168.1.10, the host will be:
+For example, if the IPv4 address of the remote machine is 192.168.1.108, the host will be:
 
 ```python
 
-host = '192.168.1.10'
+host = '192.168.1.108'
 ```
 
 Make sure your partner's server is running and listening on the specified IP address and port.
