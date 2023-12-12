@@ -4,6 +4,7 @@ import threading
 import time
 import contextlib
 import errno
+from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 import sys
@@ -30,21 +31,40 @@ def GetFreePort(minPort: int = 1024, maxPort: int = 65535):
 
 
 def GetServerData() -> []:
-    return mongo.QueryToList()
+    return mongo.QueryDatabase()
 
 
-def CalculateBestHighway(sensorTable) -> []:
+def CalculateBestRoad(timedata) -> []:
     # TODO: Implement logic to calculate the best highway based on sensor data
-    limit = datetime.now() - timedelta(minutes=5)
-    data = mongo.QueryDatabase(sensorTable)
-    l = data[0] + data[1]
-    total = 0
+    if not timedata:
+        return "No data available"
 
-    for sensorData in l:
-        if float(sensorData.timestamp) >= limit.timestamp():
-            total += sensorData.value
+        # Assuming timedata is a list of dictionaries with 'highway' and 'timestamp' keys
+        # Example: [{'highway': 'A', 'timestamp': '2023-12-06T22:44:02.000+00:00'}, ...]
 
-        return (l[0].topic, total / l[0].length)
+    road_times = defaultdict(list)
+
+    # Group data by highway and collect timestamps
+    for entry in timedata:
+        road_times[entry['highway']].append(entry['timestamp'])
+
+    # Calculate average time for each road
+    avg_times = {}
+    for road, timestamps in road_times.items():
+        # Convert timestamps to datetime objects for calculations
+        datetime_timestamps = [datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S.%f%z") for ts in timestamps]
+
+        # Calculate the time differences between timestamps
+        time_diffs = [(ts - datetime_timestamps[i - 1]).total_seconds() / 60 for i, ts in enumerate(datetime_timestamps) if i > 0]
+
+        # Calculate average time for the road
+        avg_time = sum(time_diffs) / len(time_diffs) if time_diffs else 0
+        avg_times[road] = avg_time
+
+    # Find the road with the lowest average time
+    best_road = min(avg_times, key=avg_times.get)
+
+    return best_road
 
 
 def ListenOnTCP(tcpSocket: socket.socket, socketAddress):
@@ -52,7 +72,7 @@ def ListenOnTCP(tcpSocket: socket.socket, socketAddress):
     clientMessage = tcpSocket.recv(maxPacketSize).decode()
     if clientMessage:
         serverData = GetServerData()
-        bestRoad = CalculateBestHighway(serverData)
+        bestRoad = CalculateBestRoad(serverData)
         tcpSocket.send(bestRoad.encode())
 
 def CreateTCPSocket() -> socket.socket:
