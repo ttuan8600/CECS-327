@@ -20,15 +20,17 @@ tcpSocket.connect((serverIP, tcpPort))
 
 clientMessage = ""
 while clientMessage != "exit":
-    clientMessage = input("Please type the message that you'd like to send (Or type \"exit\" to exit):\n>");
+    clientMessage = input("Type 'traffic' or 'best road' (Or type \"exit\" to exit):\n>");
 
     # TODO: Send the message to your server
-    tcpSocket.send(clientMessage.encode())
-
-    # TODO: Receive a reply from the server for the best highway to take
-    receiveData = tcpSocket.recv(maxPacketSize).decode()
-
-    # TODO: Print the best highway to take
-    print(f"Best highway to take: {receiveData}")
+    if clientMessage.startswith('traffic') or clientMessage.startswith('best road'):
+        tcpSocket.send(clientMessage.encode())
+        # TODO: Receive a reply from the server for the best highway to take
+        receiveData = tcpSocket.recv(maxPacketSize).decode()
+        # TODO: Print the best highway to take
+        print(f"Best road to take: {receiveData}")
+    else:
+        print('invalid command!')
+    print('\n')
 
 tcpSocket.close()

@@ -55,13 +55,13 @@ def QueryToList(query):
         return data
 
 
-def QueryDatabase() -> []:
+def QueryDatabase(sensorTable) -> []:
     global DBName
     global connectionURL
     global currentDBName
     global running
     global filterTime
-    global sensorTable
+    # global sensorTable
     cluster = None
     client = None
     db = None
