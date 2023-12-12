@@ -59,7 +59,7 @@ def QueryDatabase() -> []:
                 sensorC += payload.get('Sensor C')
 
         avgA, avgB, avgC = sensorA/5, sensorB/5, sensorC/5
-        sensorData = [{"Freeway A Average Time": avgA, "Freeway B Average Time": avgB, "Freeway C Average Time": avgC}]
+        sensorData = [{"Freeway A": avgA, "Freeway B": avgB, "Freeway C": avgC}]
         print(sensorData)
         # Return that sensor data as a list
         return sensorData

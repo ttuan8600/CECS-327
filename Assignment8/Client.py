@@ -11,7 +11,7 @@ serverIP = 'localhost'  # TODO: Change this to your instance IP
 
 tcpSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
-    tcpPort = int(input("Please enter the TCP port of the host..."))
+    tcpPort = int(input("Please enter the TCP port of the host: "))
 except:
     tcpPort = 0
 if tcpPort == 0:
