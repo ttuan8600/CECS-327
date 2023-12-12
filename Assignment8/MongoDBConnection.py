@@ -7,7 +7,7 @@ import time
 
 DBName = "test"  # Use this to change which Database we're accessing
 connectionURL = "mongodb+srv://ttuan8600:qBmdFkQLeENoh4dH@cecs-326-029136612-twan.wbabn0a.mongodb.net/?retryWrites=true&w=majority"  # Put your database URL here
-sensorTable = "Traffic Data B"  # Change this to the name of your sensor data table
+sensorTable = "Traffic Data ABC"  # Change this to the name of your sensor data table
 
 def QueryToList(query):
     # TODO: Convert the query that you get in this function to a list and return it
