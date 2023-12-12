@@ -12,20 +12,7 @@ sensorTable = "Traffic Data B"  # Change this to the name of your sensor data ta
 def QueryToList(query):
     # TODO: Convert the query that you get in this function to a list and return it
     # HINT: MongoDB queries are iterable
-    parsed_data = []
-
-    for entry in query:
-        payload = entry.get('payload', {})
-        road_sensor = payload.get('Road B Sensor')
-        timestamp = payload.get('time')
-
-        # Ensure both fields are available before appending to the list
-        if road_sensor is not None and timestamp is not None:
-            parsed_data.append({'highway': road_sensor, 'timestamp': timestamp})
-
-    print(parsed_data)
-    return parsed_data
-
+    return list(query)
 
 
 def QueryDatabase() -> []:
@@ -57,14 +44,25 @@ def QueryDatabase() -> []:
         print("Old Docs:", oldDocuments)
 
         # TODO: Parse the documents that you get back for the sensor data that you need
-        timedata = []
-        for entry in oldDocuments+currentDocuments:
-            roadSensor = entry.get('topic')
-            timestamp = entry.get('time')
+        # Update current documents
+        if (len(currentDocuments)) == 0:
+            currentDocuments = oldDocuments
 
-            timedata.append({'highway': roadSensor, 'timestamp': timestamp})
+        sensorA, sensorB, sensorC = 0, 0, 0
+        for doc in currentDocuments:
+            payload = doc['payload']
+            if payload.get('Sensor A') != None:
+                sensorA += payload.get('Sensor A')
+            elif payload.get('Sensor B') != None:
+                sensorB += payload.get('Sensor B')
+            else:
+                sensorC += payload.get('Sensor C')
+
+        avgA, avgB, avgC = sensorA/5, sensorB/5, sensorC/5
+        sensorData = [{"Freeway A Average Time": avgA, "Freeway B Average Time": avgB, "Freeway C Average Time": avgC}]
+        print(sensorData)
         # Return that sensor data as a list
-        return timedata
+        return sensorData
 
     except Exception as e:
         print("Please make sure that this machine's IP has access to MongoDB.")

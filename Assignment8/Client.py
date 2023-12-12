@@ -29,6 +29,8 @@ while clientMessage != "exit":
         serverReply = tcpSocket.recv(maxPacketSize).decode()
         # TODO: Print the best highway to take
         print(f"Best road to take: {serverReply}")
+    elif clientMessage.startswith('exit'):
+        break
     else:
         print('invalid input!')
 
