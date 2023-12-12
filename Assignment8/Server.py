@@ -10,7 +10,7 @@ import sys
 import MongoDBConnection as mongo
 
 maxPacketSize = 1024
-defaultPort = 9900  # TODO: Set this to your preferred port
+defaultPort = 9990  # TODO: Set this to your preferred port
 
 
 def GetFreePort(minPort: int = 1024, maxPort: int = 65535):
