@@ -29,8 +29,8 @@ def GetFreePort(minPort: int = 1024, maxPort: int = 65535):
                     print("An exotic error occurred:", e)
 
 
-def GetServerData(sensorTable) -> []:
-    return mongo.QueryDatabase(sensorTable)
+def GetServerData() -> []:
+    return mongo.QueryToList()
 
 
 def CalculateBestHighway(sensorTable) -> []:
@@ -49,36 +49,11 @@ def CalculateBestHighway(sensorTable) -> []:
 
 def ListenOnTCP(tcpSocket: socket.socket, socketAddress):
     # TODO: Implement TCP Code, use GetServerData to query the database.
-    while True:
-        # Receive data from the client
-        query = tcpSocket.recv(maxPacketSize).decode()
-        print(query)
-        if query.startswith('traffic'):
-            query = query.strip()
-            sensor = query[query.index('<') + 1 : query.index('>')]
-            print(sensor)
-            mongoData = GetServerData(sensor)
-            if mongoData is None:
-                tcpSocket.send("invalid sensor".encode())
-            else:
-                mongoData = mongoData[1]
-                total = 0
-                length = mongoData[0].length
-                for doc in mongoData:
-                    total += doc.value
-                tcpSocket.send(f"total:{total}, len:{length}".encode())
-
-        if query.startswith('best road'):
-            roadA = CalculateBestHighway('Traffic Data A')
-            roadB = CalculateBestHighway('Traffic Data B')
-            roadC = CalculateBestHighway('Traffic Data C')
-            result = roadA
-            if roadB[1] < result[1]:
-                result = roadB
-
-            if roadC[1] < result[1]:
-                result = roadC
-            tcpSocket.send(result[0].strip().split('/')[1].encode())
+    clientMessage = tcpSocket.recv(maxPacketSize).decode()
+    if clientMessage:
+        serverData = GetServerData()
+        bestRoad = CalculateBestHighway(serverData)
+        tcpSocket.send(bestRoad.encode())
 
 def CreateTCPSocket() -> socket.socket:
     tcpSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -100,7 +75,7 @@ def LaunchTCPThreads():
 if __name__ == "__main__":
     tcpThread = threading.Thread(target=LaunchTCPThreads)
     tcpThread.start()
-    exitSignal = 0
+    exitSignal = False
     while not exitSignal:
         time.sleep(1)
     print("Ending program by exit signal...")

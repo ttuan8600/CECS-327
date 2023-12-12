@@ -7,61 +7,34 @@ import time
 
 DBName = "test"  # Use this to change which Database we're accessing
 connectionURL = "mongodb+srv://ttuan8600:qBmdFkQLeENoh4dH@cecs-326-029136612-twan.wbabn0a.mongodb.net/?retryWrites=true&w=majority"  # Put your database URL here
-# sensorTable = "Traffic Data B"  # Change this to the name of your sensor data table
-
-
-class SensorData:
-    def __init__(self, length, topic, timestamp, device_asset_uid, sensor, value):
-        self.length = length
-        self.topic = topic
-        self.timestamp = timestamp
-        self.device_asset_uid = device_asset_uid
-        self.sensor = sensor
-        self.value = value
-
-    def __str__(self):
-        return 'length={} topic={} sensor={} value={}'.format(self.length, self.topic, self.sensor, self.value)
-
+# sensorTable = "Road B Sensor"  # Change this to the name of your sensor data table
 
 def QueryToList(query):
     # TODO: Convert the query that you get in this function to a list and return it
     # HINT: MongoDB queries are iterable
-    data = []
-    for doc in query:
-        length = doc['length']
-        topic = doc['topic']
-        timestamp = doc['payload']['timestamp']
-        device_asset_uid = doc['payload']['device_asset_uid']
+    parsed_data = []
 
-        sensor = None
-        value = None
+    for entry in query:
+        payload = entry.get('payload', {})
+        road_sensor = payload.get('Road B Sensor')
+        timestamp = payload.get('time')
 
-        payload = doc['payload']
-        for e in payload.keys():
-            if e not in ('timestamp', 'topic', 'device_asset_uid'):
-                sensor = e
-                value = payload[e]
+        # Ensure both fields are available before appending to the list
+        if road_sensor is not None and timestamp is not None:
+            parsed_data.append({'highway': road_sensor, 'timestamp': timestamp})
 
-        data.append(
-            SensorData(
-                length,
-                topic,
-                timestamp,
-                device_asset_uid,
-                sensor,
-                value
-            )
-        )
-        return data
+    print(parsed_data)
+    return parsed_data
 
 
-def QueryDatabase(sensorTable) -> []:
+
+def QueryDatabase() -> []:
     global DBName
     global connectionURL
     global currentDBName
     global running
     global filterTime
-    # global sensorTable
+    global sensorTable
     cluster = None
     client = None
     db = None
@@ -84,9 +57,14 @@ def QueryDatabase(sensorTable) -> []:
         print("Old Docs:", oldDocuments)
 
         # TODO: Parse the documents that you get back for the sensor data that you need
+        timedata = []
+        for entry in oldDocuments+currentDocuments:
+            roadSensor = entry.get('topic')
+            timestamp = entry.get('time')
 
+            timedata.append({'highway': roadSensor, 'timestamp': timestamp})
         # Return that sensor data as a list
-        return [oldDocuments, currentDocuments]
+        return timedata
 
     except Exception as e:
         print("Please make sure that this machine's IP has access to MongoDB.")
