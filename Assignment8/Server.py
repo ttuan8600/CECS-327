@@ -12,6 +12,7 @@ import MongoDBConnection as mongo
 maxPacketSize = 1024
 defaultPort = 9900  # TODO: Set this to your preferred port
 
+
 def GetFreePort(minPort: int = 1024, maxPort: int = 65535):
     for i in range(minPort, maxPort):
         print("Testing port", i)
@@ -31,18 +32,20 @@ def GetFreePort(minPort: int = 1024, maxPort: int = 65535):
 def GetServerData(sensorTable) -> []:
     return mongo.QueryDatabase(sensorTable)
 
+
 def CalculateBestHighway(sensorTable) -> []:
     # TODO: Implement logic to calculate the best highway based on sensor data
     limit = datetime.now() - timedelta(minutes=5)
     data = mongo.QueryDatabase(sensorTable)
     l = data[0] + data[1]
     total = 0
-    
+
     for sensorData in l:
         if float(sensorData.timestamp) >= limit.timestamp():
             total += sensorData.value
-        
+
         return (l[0].topic, total / l[0].length)
+
 
 def ListenOnTCP(tcpSocket: socket.socket, socketAddress):
     # TODO: Implement TCP Code, use GetServerData to query the database.

@@ -9,17 +9,19 @@ DBName = "test"  # Use this to change which Database we're accessing
 connectionURL = "mongodb+srv://ttuan8600:qBmdFkQLeENoh4dH@cecs-326-029136612-twan.wbabn0a.mongodb.net/?retryWrites=true&w=majority"  # Put your database URL here
 sensorTable = "Traffic Data B"  # Change this to the name of your sensor data table
 
-class SensorData:
-	def __init__(self, length, topic, timestamp, device_asset_uid, sensor, value):
-		self.length = length
-		self.topic = topic
-		self.timestamp = timestamp
-		self.device_asset_uid = device_asset_uid
-		self.sensor = sensor
-		self.value = value
 
-	def __str__(self):
-		return 'length={} topic={} sensor={} value={}'.format(self.length, self.topic, self.sensor, self.value)
+class SensorData:
+    def __init__(self, length, topic, timestamp, device_asset_uid, sensor, value):
+        self.length = length
+        self.topic = topic
+        self.timestamp = timestamp
+        self.device_asset_uid = device_asset_uid
+        self.sensor = sensor
+        self.value = value
+
+    def __str__(self):
+        return 'length={} topic={} sensor={} value={}'.format(self.length, self.topic, self.sensor, self.value)
+
 
 def QueryToList(query):
     # TODO: Convert the query that you get in this function to a list and return it
@@ -82,7 +84,7 @@ def QueryDatabase() -> []:
         print("Old Docs:", oldDocuments)
 
         # TODO: Parse the documents that you get back for the sensor data that you need
-            
+
         # Return that sensor data as a list
         return [oldDocuments, currentDocuments]
 
