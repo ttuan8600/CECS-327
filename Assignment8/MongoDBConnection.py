@@ -4,6 +4,7 @@ import threading
 import pymongo
 from datetime import datetime, timedelta
 import time
+import certifi
 
 DBName = "test"  # Use this to change which Database we're accessing
 connectionURL = "mongodb+srv://ttuan8600:qBmdFkQLeENoh4dH@cecs-326-029136612-twan.wbabn0a.mongodb.net/?retryWrites=true&w=majority"  # Put your database URL here
@@ -27,7 +28,7 @@ def QueryDatabase() -> []:
     db = None
     try:
         cluster = connectionURL
-        client = MongoClient(cluster)
+        client = MongoClient(cluster, tlsCAFile=certifi.where())
         db = client[DBName]
         print("Database collections: ", db.list_collection_names())
 
